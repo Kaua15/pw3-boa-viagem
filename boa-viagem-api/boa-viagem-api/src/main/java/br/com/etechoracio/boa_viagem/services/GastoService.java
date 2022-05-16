@@ -19,21 +19,21 @@ public class GastoService {
 
 	}
 	
-	public Gasto buscarPorID(Long id) 
+	public Optional<Gasto> buscarPorID(Long id) 
 	{
-		Optional<Gasto> existe = repository.findById(id);
-		return existe.isPresent() ? existe.get() : null;
+		return repository.findById(id);
 	}
 	
 	
-	public void excluir(Long id) 
+	public boolean excluir(Long id) 
 	{
 		boolean existe = repository.existsById(id);
 		
 		if(existe) 
 		{
-			repository.deleteById(id);
-		} 
+			repository.findById(id);
+		}
+		return existe; 
 	}
 	
 	public Gasto inserir(Gasto obj)
@@ -42,14 +42,14 @@ public class GastoService {
 	}
 	
 
-	public Gasto atualizar(Long id, Gasto gasto) 
+	public Optional<Gasto> atualizar(Long id, Gasto gasto) 
 	{
 		boolean existe = repository.existsById(id);
 		if(!existe) 
 		{
-			return null); 
+			return Optional.empty();
 		}
 		
-		return repository.save(gasto);
+		return Optional.of(repository.save(gasto));
 	}
 }

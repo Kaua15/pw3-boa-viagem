@@ -37,7 +37,7 @@ public class ViagemService {
 		{
 			repository.deleteById(id);
 		}
-		return null;
+		return (Boolean) null;
 	}
 	
 	public Viagem inserir(Viagem obj)
