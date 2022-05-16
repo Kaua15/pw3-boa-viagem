@@ -1,9 +1,10 @@
 package br.com.etechoracio.boa_viagem.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.RepositoryType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.StreamingHttpOutputMessage.Body;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,17 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.etechoracio.boa_viagem.entity.Gasto;
-import br.com.etechoracio.boa_viagem.repository.GastoRepository;
 import br.com.etechoracio.boa_viagem.services.GastoService;
-
-import java.util.List;
-import java.util.Optional;
-
-import javax.xml.ws.Response;
 
 @RestController
 @RequestMapping("/gastos")
 public class GastoController {
+	
 	@Autowired
 	private GastoService service;
 	
