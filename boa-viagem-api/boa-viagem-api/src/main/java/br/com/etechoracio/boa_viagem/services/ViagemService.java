@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.etechoracio.boa_viagem.entity.Gasto;
 import br.com.etechoracio.boa_viagem.entity.Viagem;
+import br.com.etechoracio.boa_viagem.repository.GastoRepository;
 import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
 
 public class ViagemService {
@@ -20,24 +21,17 @@ public class ViagemService {
 	@Autowired
 	private ViagemRepository repository;
 	
+	@Autowired
+	private GastoRepository gastoRepository;
+	
 	public List<Viagem> listarTodos()
 	{
 		return repository.findAll();
 	}
 	
-	public Viagem buscarPorID(Long id) 
+	public Optional<Viagem> buscarPorID(Long id) 
 	{
-		return repository.findById(id).orElse(null);
-	}
-	
-	public  boolean excluir(Long id) {
-		boolean existe = repository.existsById(id);
-		
-		if(existe) 
-		{
-			repository.deleteById(id);
-		}
-		return (Boolean) null;
+		return repository.findById(id);
 	}
 	
 	public Viagem inserir(Viagem obj)
@@ -53,8 +47,23 @@ public class ViagemService {
 		{
 			return Optional.empty(); 
 		}
-		
 		return Optional.of(repository.save(viagem));
 	}
 	
+	public boolean excluir(Long id) {
+		boolean existe = repository.existsById(id);
+		if(!existe) 
+		{
+			return existe;
+		}
+		
+		List<Gasto> gastos = gastoRepository.findByViagemId(id);
+		if(!gastos.isEmpty())
+		{
+			gastoRepository.deleteAll();
+		}
+		
+		repository.deleteById(id);
+		return existe;
+	}
 }
