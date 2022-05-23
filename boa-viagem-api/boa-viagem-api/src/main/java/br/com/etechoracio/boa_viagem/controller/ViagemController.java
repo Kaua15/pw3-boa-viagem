@@ -28,7 +28,6 @@ public class ViagemController {
 	public List<Viagem> listarTodos()
 	{
 		return service.listarTodos();
-
 	}
 	
 	//fazendo metodo de requisição da tabela gasto por id
