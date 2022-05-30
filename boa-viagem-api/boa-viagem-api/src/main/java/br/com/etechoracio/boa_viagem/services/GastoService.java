@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.etechoracio.boa_viagem.entity.Gasto;
+import br.com.etechoracio.boa_viagem.entity.Viagem;
 import br.com.etechoracio.boa_viagem.repository.GastoRepository;
+import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
 
 @Service
 public class GastoService {
@@ -15,6 +17,9 @@ public class GastoService {
 	
 	@Autowired
 	private GastoRepository repository;
+	
+	@Autowired
+	private ViagemRepository viagemRepo;
 	
 	public List<Gasto> listarTodos()
 	{
@@ -40,7 +45,15 @@ public class GastoService {
 	}
 	
 	public Gasto inserir(Gasto obj)
-	{
+	{	
+		Optional<Viagem> existe = viagemRepo.findById(obj.getViagem().getId());
+		if(!existe.isPresent()) {
+			throw new RuntimeException("Viagem não encontrada.");
+		}	
+		if(existe.get().getSaida() != null) {
+			throw new RuntimeException("Data de viagem já foi encerrada.");
+		}
+		
 		return repository.save(obj);
 	}
 	
@@ -51,8 +64,8 @@ public class GastoService {
 		if(!existe) 
 		{
 			return Optional.empty();
-		}
-		
+		} 
+
 		return Optional.of(repository.save(gasto));
 	}
 }
